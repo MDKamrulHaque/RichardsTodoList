@@ -17,52 +17,52 @@ namespace RichardsTodoList
 
         public void DisplayTaskDetails()
         {
-            Console.WriteLine($"-{NameOfTheTask}");
+            Console.WriteLine(NameOfTheTask);
         }
 
-        internal static void AddItemOnList(List<TodoList> todoLists)
+        internal static void AddItemOnList(List<TodoList> todoLists, string userSelectionMenu)
         {
-            Console.WriteLine("You selected to add an item");
-            Console.WriteLine("Enter what to add: ");
-            string nameOfTheTask = Console.ReadLine();
-
-            TodoList todo = new TodoList(nameOfTheTask);
-            todoLists.Add(todo);
-            Console.WriteLine("Task added to list");
-        }
-
-        internal static void DeleteTask(List<TodoList> todoLists)
-        {
-            Console.WriteLine("Which task you want to delete");
-            string nameOfTheTask = Console.ReadLine();
-            var taskTodelete = todoLists.FirstOrDefault(x => x.NameOfTheTask == nameOfTheTask);
-
-            if (taskTodelete != null)
+            if (String.IsNullOrWhiteSpace(userSelectionMenu))
             {
-                todoLists.Remove(taskTodelete);
-                Console.WriteLine("Task deleted");
+                Console.WriteLine("Invalid, Enter somthing to add");
             }
             else
             {
-                Console.WriteLine("not found");
+                TodoList usersTasks = new TodoList(userSelectionMenu.Trim().ToLower());
+
+                todoLists.Add(usersTasks);
+
+                Console.WriteLine("Task Has Been Added On The To-Do List\n");
             }
         }
 
-        internal static void CompletedTask(List<TodoList> todoLists)
+        internal static void DeleteTask(List<TodoList> todoLists, string userSelectionMenu)
         {
-            Console.WriteLine("which task to complete");
-            string taskToComplte = Console.ReadLine();
+            var taskToRemove = todoLists.FirstOrDefault(x => x.NameOfTheTask == userSelectionMenu.Trim().ToLower());
 
-            var completedTask = todoLists.FirstOrDefault(x => x.NameOfTheTask == taskToComplte);
-
-            if (completedTask != null)
+            if (taskToRemove != null)
             {
-                completedTask.IsDone = true;
-                Console.WriteLine("Task completed");
+                todoLists.Remove(taskToRemove);
+                Console.WriteLine("Task Has Been Removed From List\n");
             }
             else
             {
-                Console.WriteLine("not found");
+                Console.WriteLine("Item not found!, Enter the correct name of the task!\n");
+            }
+        }
+
+        internal static void ComplteTask(List<TodoList> todoLists, string userSelectionMenu)
+        {
+            var taskToRemove = todoLists.FirstOrDefault(x => x.NameOfTheTask == userSelectionMenu.Trim().ToLower());
+
+            if (taskToRemove != null)
+            {
+                taskToRemove.IsDone = true;
+                Console.WriteLine("Your Task List Has Been Updated\n");
+            }
+            else
+            {
+                Console.WriteLine("Item not found! Enter the correct name of the task!\n");
             }
         }
 
@@ -98,6 +98,28 @@ namespace RichardsTodoList
                     Console.WriteLine("");
                 }
             }
+        }
+
+        internal static void HelpMenu()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("***********************************");
+            Console.WriteLine("*     Welcome to TodoList \"V2\"     *");
+            Console.WriteLine("***********************************");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("");
+            Console.WriteLine("Instructions!");
+            Console.WriteLine("All commands must be in CAPITAL CASES!!");
+            Console.WriteLine("");
+            Console.WriteLine("Commands are as follows:");
+            Console.WriteLine("");
+            Console.WriteLine("\"ADD\", to add task To-Do");
+            Console.WriteLine("\"COMPLETE\" to mark as completed");
+            Console.WriteLine("\"DELETE\" to delete task(s)");
+            Console.WriteLine("\"VIEW\" to see all task(s)");
+            Console.WriteLine("\"HELP\" to..Wait your already did..");
+            Console.WriteLine("\"CLOSE\" to leave application");
+            Console.WriteLine("");
         }
     }
 }

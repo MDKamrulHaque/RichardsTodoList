@@ -2,53 +2,47 @@
 
 List<TodoList> todos = new List<TodoList>();
 
-
-string userSelection;
-
-
-
 string userSelectionMenu;
 
 do
 {
-    Console.WriteLine("");
-    Console.WriteLine("todo: v1");
-    Console.WriteLine("What would you like to do");
-    Console.WriteLine("");
-    Console.WriteLine("1: to add task To-Do");
-    Console.WriteLine("2: to mark as completed");
-    Console.WriteLine("3: to delete task(s)");
-    Console.WriteLine("4: to see all task(s)");
-    Console.WriteLine("5: to leave application");
-    Console.WriteLine("");
-
     userSelectionMenu = Console.ReadLine();
 
-    switch (userSelectionMenu)
+    if (userSelectionMenu.Contains("ADD"))
     {
-        case "1":
-            TodoList.AddItemOnList(todos);
-            break;
+        string newUserSelection = userSelectionMenu.Replace("ADD", "");
 
-        case "2":
-            TodoList.CompletedTask(todos);
-            break;
-
-        case "3":
-            TodoList.DeleteTask(todos);
-            break;
-
-        case "4":
-            TodoList.ViewAllTask(todos);
-            break;
-
-        case "5": break;
-
-        default:
-            Console.WriteLine("invalid, please try again");
-            break;
+        TodoList.AddItemOnList(todos, newUserSelection);
     }
-} while (userSelectionMenu != "5");
+    else if (userSelectionMenu.Contains("VIEW"))
+    {
+        TodoList.ViewAllTask(todos);
+    }
+    else if (userSelectionMenu.Contains("COMPLETE"))
+    {
+        string newUserSelection = userSelectionMenu.Replace("COMPLETE", "");
+        TodoList.ComplteTask(todos, newUserSelection);
+    }
+    else if (userSelectionMenu.Contains("DELETE"))
+    {
+        string newUserSelection = userSelectionMenu.Replace("DELETE", "");
+        TodoList.DeleteTask(todos, newUserSelection);
+    }
+    else if (userSelectionMenu.Contains("HELP"))
+    {
+        TodoList.HelpMenu();
+    }
+    else
+    {
+        if (userSelectionMenu.Contains("CLOSE"))
+        {
+            Console.WriteLine("Thanks for using the application");
+        }
+        else
+        {
+            Console.WriteLine("Type \"HELP\" for more information");
+        }
+    }
+}
 
-Console.WriteLine("App Closed");
-
+while (userSelectionMenu != "CLOSE");
