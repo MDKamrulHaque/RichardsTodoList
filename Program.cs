@@ -1,123 +1,146 @@
 ﻿using RichardsTodoList;
 using static RichardsTodoList.AppCommands;
-using System.Numerics;
-using System.Runtime.InteropServices;
-
+using static RichardsTodoList.HelpMenu;
 
 List<ListOfLists> allLists = new List<ListOfLists>();
-
-ListOfLists list1 = new ListOfLists { ListName = "List One", TodoLists = new List<TodoList>() };
-ListOfLists list2 = new ListOfLists { ListName = "List Two", TodoLists = new List<TodoList>() };
-
-allLists.Add(list1);
-allLists.Add(list2);
-
-string userSelectionMenu;
+string userSelection;
 
 do
-{
-    userSelectionMenu = Console.ReadLine();
+{    userSelection = Console.ReadLine();
 
-    if (userSelectionMenu.Equals(ViewLists))
+    if (userSelection.Equals(CreateList))
     {
-        Console.WriteLine("\nThese are the lists: ");
-        foreach (var list in allLists)
-        {
-            Console.WriteLine(list.ListName);
-            Console.WriteLine();
-        }
-    }
-    else if (userSelectionMenu.Contains(Add))
-    {
-        string listName = userSelectionMenu.Replace(Add, string.Empty).Trim();
-        ListOfLists selectedList = allLists.FirstOrDefault(i => i.ListName == listName);
 
-        if (selectedList != null)
+            Console.WriteLine("\nPlease Enter a List Name spaces will be ignored\n");
+            string userListName = Console.ReadLine().Replace(" ", "");
+            ListOfLists userList = new ListOfLists { ListName = userListName, TodoLists = new List<TodoList>() };
+            allLists.Add(userList);
+            Console.WriteLine($"\nList with the following name {userList.ListName} created\n");
+    }
+    else if (userSelection.Equals(ViewLists))
+    {
+        if(allLists.Count > 0)
         {
-            TodoList.AddItemOnList(selectedList, userSelectionMenu);
+            foreach (var lists in allLists)
+            {
+                Console.WriteLine($"\n{lists.ListName}\n");
+            }
         }
         else
         {
-            Console.WriteLine("\nplease enter the list name as well\n");
+            Console.WriteLine("\nNo lists has been created\n");
         }
-    }
-    else if (userSelectionMenu.Contains(Delete))
-    {
-        string listName = userSelectionMenu.Replace(Delete, string.Empty).Trim();
-        ListOfLists selectedList = allLists.FirstOrDefault(i => i.ListName == listName);
 
-        if (selectedList != null)
-        {
-            TodoList.DeleteTask(selectedList, userSelectionMenu);
-        }
-        else
-        {
-            Console.WriteLine("\nplease enter the list name as well\n");
-        }
     }
-    else if (userSelectionMenu.Contains(Complete))
+    else if (userSelection.Contains(Add))
     {
-        string listName = userSelectionMenu.Replace(Complete, string.Empty).Trim();
-        ListOfLists selectedList = allLists.FirstOrDefault(i => i.ListName == listName);
+        try{
+            string[] parts = userSelection.Split(' ');
+            string actualListName = parts[1];
+            ListOfLists selectedList = allLists.FirstOrDefault(i => i.ListName == actualListName);
+            if (selectedList != null)
+            {
+                TodoList.AddTask(selectedList, userSelection);
+            }
+            else
+            {
+                Console.WriteLine("\nList not found, create a list or try again using correct list name or Type \"HELP\"\n");
+            }
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            Console.WriteLine(e.Message +" please provide a list name");
+        }
 
-        if (selectedList != null)
-        {
-            TodoList.ComplteTask(selectedList, userSelectionMenu);
-        }
-        else
-        {
-            Console.WriteLine("\nplease enter the list name as well\n");
-        }
     }
-    else if (userSelectionMenu.Contains(View))
+    else if (userSelection.Contains(Delete))
     {
-        string listName = userSelectionMenu.Replace(View, string.Empty).Trim();
-        ListOfLists selectedList = allLists.FirstOrDefault(i => i.ListName == listName);
+        try
+        {
+            string[] parts = userSelection.Split(' ');
+            string actualListName = parts[1];
 
-        if (selectedList != null)
-        {
-            TodoList.ViewAllTask(selectedList, userSelectionMenu);
+            ListOfLists selectedList = allLists.FirstOrDefault(i => i.ListName == actualListName);
+
+            if (selectedList != null)
+            {
+                TodoList.DeleteTask(selectedList, userSelection);
+            }
+            else
+            {
+                Console.WriteLine("\nList not found, create a list or try again using correct list name or Type \"HELP\"\n");
+            }
         }
-        else
+        catch (IndexOutOfRangeException e)
         {
-            Console.WriteLine("\nplease enter the list name as well\n");
-        }
-    }
-    else if (userSelectionMenu.Equals(Help))
-    {
-        if (userSelectionMenu != null)
-        {
-            HelpMenu.HelpMenus();
-        }
-        else
-        {
-            Console.WriteLine("\nNot valid, type \"HELP\" for more info...\n");
+            Console.WriteLine(e.Message + " please provide a list name");
         }
     }
-    else if (userSelectionMenu.Equals(Clear))
+    else if (userSelection.Contains(Complete))
     {
-        if (userSelectionMenu != null)
+        try
         {
-            Console.Clear();
+            string[] parts = userSelection.Split(' ');
+            string actualListName = parts[1];
+            ListOfLists selectedList = allLists.FirstOrDefault(i => i.ListName == actualListName);
+
+            if (selectedList != null)
+            {
+                actualListName.Replace(actualListName, "");
+                TodoList.CompleteTask(selectedList, userSelection);
+            }
+            else
+            {
+                Console.WriteLine("\nList not found, create a list or try again using correct list name or Type \"HELP\"\n");
+            }
+
         }
-        else
+        catch (IndexOutOfRangeException e)
         {
-            Console.WriteLine("\nNot valid, type \"HELP\" for more info...\n"); ;
+            Console.WriteLine(e.Message + " please provide a list name");
+        }
+
+    }
+    else if (userSelection.Contains(View))
+    {
+        try
+        {
+            string[] parts = userSelection.Split(' ');
+            string actualListName = parts[1];
+            ListOfLists selectedList = allLists.FirstOrDefault(i => i.ListName == actualListName);
+            if (selectedList != null)
+            {
+
+                TodoList.ViewTask(selectedList, userSelection);
+            }
+            else
+            {
+                Console.WriteLine("\nList not found, create a list or try again using correct list name or Type \"HELP\"\n");
+            }
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            Console.WriteLine(e.Message + " please provide a list name");
         }
     }
-    else if (userSelectionMenu.Equals(Close))
+    else if (userSelection.Equals(Help))
     {
-        if (userSelectionMenu != null)
-        {
-            Console.WriteLine("Thansk for using the applicaton");
-        }
-        else
-        {
-            Console.WriteLine("\nNot valid, type \"HELP\" for more info...\n"); ;
-        }
+            HelpMenus();
+    }
+    else if (userSelection.Equals(Clear))
+    {
+        Console.Clear();
+    }
+    else if (userSelection.Equals(Close))
+    {
+        Console.WriteLine("\n Thanks for using the app..\n");
     }
     else
     {
-        Console.WriteLine("\nNot valid, type \"HELP\" for more info...\n");
+        Console.WriteLine("\nNot Valid type \"HELP\" for more info..\n");
     }
-} while (userSelectionMenu != Close);
+
+
+} while (userSelection != Close);
+
+

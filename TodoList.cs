@@ -20,86 +20,97 @@ namespace RichardsTodoList
             Console.WriteLine(NameOfTheTask);
         }
 
-        internal static void AddItemOnList(ListOfLists selectedLists, string userSelectionMenu)
+        internal static void AddTask(ListOfLists selectedList, string userSelection)
         {
-            Console.WriteLine($"\nEnter Task to add to {selectedLists.ListName}\n");
-            string userInput = Console.ReadLine();
+            char[] wordSeperator = { ' ' };
+            string[] subStrings = userSelection.Split(wordSeperator);
 
-            if (string.IsNullOrEmpty(userInput))
+            var theActualTakToAdd = string.Join(" ", subStrings, 2, subStrings.Length - 2);
+                        
+            if (String.IsNullOrWhiteSpace(theActualTakToAdd))
             {
-                Console.WriteLine("\nInvalid, nothing to add\n");
+                Console.WriteLine("\ntask cannot be empty, try again\n");
             }
             else
             {
-                TodoList task = new TodoList(userInput.Trim().ToLower());
-                selectedLists.TodoLists.Add(task);
-                Console.WriteLine($"\nTask has been add to {selectedLists.ListName}\n");
+                TodoList usersTasks = new TodoList(theActualTakToAdd.Trim().ToLower());
+                selectedList.TodoLists.Add(usersTasks);
+                Console.WriteLine($"\nTask has been add to {selectedList.ListName}\n");
             }
         }
 
-        internal static void DeleteTask(ListOfLists selectedLists, string userSelectionMenu)
+        internal static void DeleteTask(ListOfLists selectedList, string userSelection)
         {
-            Console.WriteLine($"\nEnter a task to delete from {selectedLists.ListName}\n");
-            string userInput = Console.ReadLine();
-            TodoList taskToDelete = selectedLists.TodoLists.Find(x => x.NameOfTheTask.Equals(userInput.Trim().ToLower()));
-            if (taskToDelete != null)
+            char[] wordSeperator = { ' ' };
+            string[] subStrings = userSelection.Split(wordSeperator);
+
+            var theActualTakToDelete = string.Join(" ", subStrings, 2, subStrings.Length - 2);
+
+            TodoList usersTaskToDelete = selectedList.TodoLists.Find(x => x.NameOfTheTask == theActualTakToDelete.Trim().ToLower());
+           
+            if (usersTaskToDelete != null)
             {
-                selectedLists.TodoLists.Remove(taskToDelete);
-                Console.WriteLine($"\nTask has been deleted from {selectedLists.ListName}\n");
+                selectedList.TodoLists.Remove(usersTaskToDelete);
+                Console.WriteLine($"\nTask has been deleted from {selectedList.ListName}\n");
             }
             else
             {
-                Console.WriteLine("\n Task not found\n");
+                Console.WriteLine("\nno task found, try again\n");
             }
         }
-
-        internal static void ComplteTask(ListOfLists selectedLists, string userSelectionMenu)
+        internal static void CompleteTask(ListOfLists selectedList, string userSelection)
         {
-            Console.WriteLine($"\nEnter a task to complete from {selectedLists.ListName}\n");
-            string userInput = Console.ReadLine();
+            char[] wordSeperator = { ' ' };
+            string[] subStrings = userSelection.Split(wordSeperator);
 
-            TodoList taskToUpdate = selectedLists.TodoLists.Find(x => x.NameOfTheTask.Equals(userInput.Trim().ToLower()));
-            if (taskToUpdate != null)
+            var theActualTakToComplete = string.Join(" ", subStrings, 2, subStrings.Length - 2);
+            TodoList usersTaskToComplete = selectedList.TodoLists.Find(x => x.NameOfTheTask == theActualTakToComplete.Trim().ToLower());
+            if (usersTaskToComplete != null)
             {
-                taskToUpdate.IsDone = true;
-                Console.WriteLine($"\nTask has been updated in {selectedLists.ListName}\n");
+                selectedList.TodoLists.Find(x => x.IsDone = true);
+                Console.WriteLine($"\nTask has been update from {selectedList.ListName}\n");
             }
             else
             {
-                Console.WriteLine("\n Task not found\n");
-            }
+                Console.WriteLine("\nno task found, try again\n");
+            }    
         }
 
-        internal static void ViewAllTask(ListOfLists selectedLists, string userSelectionMenu)
+        internal static void ViewTask(ListOfLists selectedList, string userSelection)
         {
-            Console.WriteLine($"\nList Type: {selectedLists.ListName}\n");
-            Console.WriteLine($"Uncompleted Tasks");
+            Console.WriteLine("");
+            Console.WriteLine($"List Type: {selectedList.ListName}");
+            Console.WriteLine("");
+            Console.WriteLine("\nList Of Uncompleted Task(s)");
+            Console.WriteLine("");
 
-            if (selectedLists.TodoLists.Where(i => !i.IsDone).Count() == 0)
+            if (selectedList.TodoLists.Where(i => !i.IsDone).Count() == 0)
             {
-                Console.WriteLine($"Empty \n");
+                Console.WriteLine("\nEmpty!");
+                Console.WriteLine("");
             }
             else
             {
-                foreach (var task in selectedLists.TodoLists.Where(i => !i.IsDone))
+                foreach (var task in selectedList.TodoLists.Where(i => !i.IsDone))
                 {
                     task.DisplayTaskDetails();
-                    Console.WriteLine();
+                    Console.WriteLine("");
                 }
             }
 
-            Console.WriteLine($"\nCompleted Tasks");
-
-            if (selectedLists.TodoLists.Where(i => i.IsDone).Count() == 0)
+            Console.WriteLine("");
+            Console.WriteLine("\nList Of Completed Task(s)");
+            if (selectedList.TodoLists.Where(i => i.IsDone).Count() == 0)
             {
-                Console.WriteLine($"Empty \n");
+                Console.WriteLine("\nEmpty!");
+                Console.WriteLine("");
             }
             else
             {
-                foreach (var task in selectedLists.TodoLists.Where(i => i.IsDone))
+                foreach (var task in selectedList.TodoLists.Where(i => i.IsDone))
                 {
                     task.DisplayTaskDetails();
-                    Console.WriteLine();
+                    Console.WriteLine("");
                 }
             }
         }

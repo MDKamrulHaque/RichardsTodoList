@@ -12,17 +12,18 @@ namespace RichardsTodoList
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("***********************************");
-            Console.WriteLine("*     Welcome to TodoList \"V3\"     *");
-            Console.WriteLine("***********************************");
+            Console.WriteLine("*****************************************************");
+            Console.WriteLine("*     Welcome to \"Richard's To-Do List\" Finale    *");
+            Console.WriteLine("*****************************************************");
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("");
             Console.WriteLine("  * Instructions!");
             Console.WriteLine("  * All commands must be in CAPITAL CASES!!");
-            Console.WriteLine("  * to add, delete, view and complete a task enter command with a list name");
+            Console.WriteLine("  * to add, delete, view and complete a task enter command with a list name AND the task");
             Console.WriteLine("");
             Console.WriteLine("  * Commands are as follows:");
             Console.WriteLine("");
+            Console.WriteLine("  * \"CREATELIST\", creates a list list(s)");
             Console.WriteLine("  * \"VIEWLISTS\", shows all current list(s)");
             Console.WriteLine("  * \"ADD\", to add task To-Do");
             Console.WriteLine("  * \"COMPLETE\" to mark as completed");

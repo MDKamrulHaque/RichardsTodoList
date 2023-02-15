@@ -13,6 +13,7 @@ namespace RichardsTodoList
     }
     internal class AppCommands
     {
+        public const string CreateList = "CREATELIST";
         public const string ViewLists = "VIEWLISTS";
         public const string Add = "ADD";
         public const string Complete = "COMPLETE";
@@ -21,6 +22,6 @@ namespace RichardsTodoList
         public const string Help = "HELP";
         public const string Close = "CLOSE";
         public const string Clear = "CLEAR";
-
+     
     }
 }
